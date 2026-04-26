@@ -1,0 +1,11 @@
+# documentacao
+*.md
+
+# git
+.git/
+.gitignore
+
+# bytecode python
+__pycache__/
+*.pyc
+*.pyo
