@@ -1,5 +1,5 @@
 # passo 01: escolher a imagem base
-FROM python:3.11-slim
+FROM python:3.11-alpine
 
 # -slim: traz uma versão mais leve do python
 

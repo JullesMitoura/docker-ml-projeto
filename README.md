@@ -1,6 +1,5 @@
 # Desenvolver o projeto de ML para predicao de eficiencia de troca termica
 
-
 1. Criar o ambiente virtual (.venv)
 ```python
 python -m venv .venv
