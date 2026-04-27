@@ -1,4 +1,4 @@
-pandas
-sqlalchemy
+pandas==3.0.2
+sqlalchemy==2.0.49
 scikit-learn==1.8.0
-python-dotenv
+python-dotenv==1.2.2

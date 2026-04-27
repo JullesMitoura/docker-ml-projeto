@@ -1,5 +1,7 @@
 # documentacao
 *.md
+*.txt
+!requirements*.txt
 
 # git
 .git/
@@ -9,3 +11,11 @@
 __pycache__/
 *.pyc
 *.pyo
+
+# artefatos de modelo
+artifacts/
+*.pkl
+
+# notebooks
+notebooks/
+*.ipynb

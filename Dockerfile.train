@@ -1,37 +1,31 @@
-# passo 01: escolher a imagem base
-FROM python:3.11-slim
-
-# -slim: traz uma versão mais leve do python
-
-# passo 02: definir o ditetorio de trabalho do container
+# ----------
+# stage 01
+# build
+FROM python:3.11-slim AS builder
 WORKDIR /app
-
-# app
-# - projeto
-
-# passo 03: instalacao de dependencias
 COPY requirements-train.txt .
 RUN pip install --no-cache-dir -r requirements-train.txt
+# ----------
+# stage 02
+FROM python:3.11-slim
+WORKDIR /app
 
-# --no-cache-dir: evita que o pip armazene os arquivos de instalação em cache, 
-# reduzindo o tamanho da imagem final
+# /usr/local/lib/python3.11/site-packages/
+#    ├── numpy/
+#    ├── pandas/
+#    ├── scikit_learn/
+#    └── ...
 
-# passo 04: copiar o codigo para o container
+# COPY A B (voce esta copiando o conteudo de A para B)
+COPY --from=builder /usr/local/lib/python3.11/site-packages /usr/local/lib/python3.11/site-packages
 COPY src/ src/
 COPY data/ data/
 
-# a estrutura do projeto dentro do container sera:
-# /app
-#  - src (aqui vem todo o projeto conforme definido no src/)
-#  - data
-
-# passo 05: definir variaveis de ambiente
 ENV DB_PATH="data/heat_exchanger.db"\
     MODEL_PATH="artifacts/heat_efficiency_model.pkl"
 
 
 # para o artefato persistir
 # docker run -v $(pwd)/artifacts:/app/artifacts docker-ml-projeto-train
-
-# passo 06: definir o comando de execucao do container
 CMD ["python", "src/train.py"]
+# ----------
