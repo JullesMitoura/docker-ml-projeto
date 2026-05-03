@@ -39,17 +39,31 @@ docker build -f Dockerfile.inference -t docker-ml-projeto-inference .
 docker run -v $(pwd)/artifacts:/app/artifacts docker-ml-projeto-train
 ```
 
+```python
+docker run --mount type=bind,source=$(pwd)/artifacts,target=/app/artifacts docker-ml-projeto-train
+```
+
+Para salvar o modelo dentro do volume (ml-artifacts):
+```python
+docker run -v ml-artifacts:/app/artifacts docker-ml-projeto-train
+```
+
 Utilizamos este comando para salvar o modelo gerado no host.
 
 -  Container de inferencia
 ```python
-docker run -v $(pwd)/artifacts:/app/artifacts docker-ml-projeto-inference python src/inference.py --efficiency 300
+docker run -v $(pwd)/artifacts:/app/artifacts docker-ml-projeto-inference python src/inference.py --efficiency 300 --version <str>
 ```
 
 ```python
-docker run -v $(pwd)/artifacts:/app/artifacts docker-ml-projeto-inference python src/inference.py --data 90
+docker run -v $(pwd)/artifacts:/app/artifacts docker-ml-projeto-inference python src/inference.py --data 90 --version <str>
 ```
 
+Para utilizar um docker volume:
+
+```python
+docker run -v ml-artifacts:/app/artifacts docker-ml-projeto-inference python src/inference.py --efficiency 300 --version heat_efficiency_model_2026-05-03_22-04-04
+```
 ---
 ### Comandos de Docker
 

@@ -7,6 +7,7 @@ from sklearn.linear_model import LinearRegression
 from sklearn.metrics import r2_score
 from sqlalchemy import create_engine
 from utils.logger import get_logger
+from utils.versioning import get_version
 from dotenv import load_dotenv
 
 logger = get_logger(__name__)
@@ -35,10 +36,15 @@ def train(x:np.ndarray, y:np.ndarray) -> LinearRegression:
     return model
 
 # funcao salvar o modelo treinado
-def save_model(model: LinearRegression, path: str):
+def save_model(model: LinearRegression, path: str, r2: float, description: str = "Modelo de regressão linear para eficiência térmica"):
     os.makedirs(os.path.dirname(path), exist_ok=True)
     with open(path, 'wb') as f:
-        pickle.dump(model, f)
+        data = {
+            'model': model,
+            'metrics': r2,
+            'description': description
+        }
+        pickle.dump(data, f)
 
 # funcao para avalair o modelo
 def evaluate(model:LinearRegression, y:np.ndarray, x:np.ndarray):
@@ -60,5 +66,5 @@ if __name__ == "__main__":
     evaluate(model, y, x)
 
     # salvar o modelo treinado
-    save_model(model, path = MODEL_PATH)
+    save_model(model, path = get_version(), r2 = evaluate(model, y, x))
     logger.info("Modelo treinado e salvo com sucesso!")
