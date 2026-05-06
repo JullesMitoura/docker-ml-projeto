@@ -38,5 +38,5 @@ jobs:
         run: docker run -v ${{ github.workspace }}/artifacts:/app/artifacts docker-ml-projeto-train
       
       # verificar se de fato o artefato foi criado
-      - name: validacao do artefato
-        run: ls artifacts/heat_efficiency_model_*.pkl || exit 1
+      - name: validacao de inferencia
+        run: docker run -v ${{ github.workspace }}/artifacts:/app/artifacts docker-ml-projeto-inference python src/inference.py --efficiency 300
