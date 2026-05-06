@@ -49,8 +49,8 @@ jobs:
           file: Dockerfile.inference
           tags: docker-ml-projeto-inference
           load: true
-          cache-from: type=gha,scope=train
-          cache-to: type=gha,scope=train,mode=max
+          cache-from: type=gha,scope=inference
+          cache-to: type=gha,scope=inference,mode=max
   
   validacao:
     # o job de valicao depende do job de build
@@ -82,8 +82,8 @@ jobs:
           file: Dockerfile.inference
           tags: docker-ml-projeto-inference
           load: true
-          cache-from: type=gha,scope=train
-          cache-to: type=gha,scope=train,mode=max
+          cache-from: type=gha,scope=inference
+          cache-to: type=gha,scope=inference,mode=max
 
       # armazenar o artefato do build da imagem de treino no runner
       - name: validacao de treino
