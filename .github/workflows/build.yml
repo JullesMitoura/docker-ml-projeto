@@ -5,3 +5,30 @@ name: Build Docker Image
 
 # passo 02:
 # definir o trigger para o workflow
+
+on:
+  push:
+    branches:
+      - modulo06
+
+# passo 03:
+# definir os jobs do workflow
+
+jobs:
+  # definimos o primeiro job, o job de build
+  build:
+    # precisamos definir o ambiente em que os jobs serão executados, nesse caso
+    # usaremos o ubuntu-latest
+    runs-on: ubuntu-latest
+
+    # para verificarmos as actions e versoes
+    # https://github.com/marketplace?type=actions
+    # definir o steps do job
+    steps:
+      # o primeiro step é o checkout do código
+      - name: checkout de codigo
+        uses: actions/checkout@v6
+
+      # o passo seguinte ser ao build do codigo
+      - name: build da imagem de treino
+        run: docker build -f Dockerfile.train -t docker-ml-projeto-train .
