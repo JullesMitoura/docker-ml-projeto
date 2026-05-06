@@ -29,12 +29,28 @@ jobs:
       - name: checkout de codigo
         uses: actions/checkout@v6
 
+      - uses: docker/setup-buildx-action@v4
+
       # o passo seguinte ser ao build do codigo
       - name: build da imagem de treino
-        run: docker build -f Dockerfile.train -t docker-ml-projeto-train .
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          file: Dockerfile.train
+          tags: docker-ml-projeto-train
+          load: true
+          cache-from: type=gha, scope=train
+          cache-to: type=gha, scope=train, mode=max
 
       - name: build da imagem de inferencia
-        run: docker build -f Dockerfile.inference -t docker-ml-projeto-inference .
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          file: Dockerfile.inference
+          tags: docker-ml-projeto-inference
+          load: true
+          cache-from: type=gha, scope=inference
+          cache-to: type=gha, scope=inference, mode=max
   
   validacao:
     # o job de valicao depende do job de build
@@ -44,6 +60,30 @@ jobs:
     steps:
       - name: checkout de codigo
         uses: actions/checkout@v6
+
+      - uses: docker/setup-buildx-action@v4
+
+      # rebuild do treino
+      - name: rebuild da imagem de treino
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          file: Dockerfile.train
+          tags: docker-ml-projeto-train
+          load: true
+          cache-from: type=gha, scope=train
+          cache-to: type=gha, scope=train, mode=max
+
+      # rebuild da inferencia
+      - name: rebuild da imagem de inferencia
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          file: Dockerfile.inference
+          tags: docker-ml-projeto-inference
+          load: true
+          cache-from: type=gha, scope=inference
+          cache-to: type=gha, scope=inference, mode=max
 
       # armazenar o artefato do build da imagem de treino no runner
       - name: validacao de treino
