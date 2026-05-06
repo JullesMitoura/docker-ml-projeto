@@ -1,0 +1,7 @@
+# passo 01:
+# atribuindo nome ao workflow
+
+name: Build Docker Image
+
+# passo 02:
+# definir o trigger para o workflow
