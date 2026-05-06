@@ -35,9 +35,18 @@ jobs:
 
       - name: build da imagem de inferencia
         run: docker build -f Dockerfile.inference -t docker-ml-projeto-inference .
+  
+  validacao:
+    # o job de valicao depende do job de build
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - name: checkout de codigo
+        uses: actions/checkout@v6
 
       # armazenar o artefato do build da imagem de treino no runner
-      - name: validacao
+      - name: validacao de treino
         run: docker run -v ${{ github.workspace }}/artifacts:/app/artifacts docker-ml-projeto-train
       
       # verificar se de fato o artefato foi criado
