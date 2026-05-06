@@ -4,6 +4,7 @@ import argparse
 from utils.logger import get_logger
 import numpy as np
 from dotenv import load_dotenv
+from utils.versioning import resolve_version, list_versions
 
 load_dotenv(override=True)
 MODEL_PATH = os.getenv("MODEL_PATH")
@@ -35,18 +36,28 @@ def predict_data(model, y):
 
     logger.info(f"Predição: eficiência {y} | dia {dia}.")
 
+def show_models():
+    list_models = list_versions()
+    for models in list_models:
+        print(models)
+
 if __name__ == "__main__":
     
     parser = argparse.ArgumentParser()
-    group = parser.add_mutually_exclusive_group(required=True)
+    group = parser.add_mutually_exclusive_group()
     group.add_argument('--efficiency', type=int)
     group.add_argument('--data', type=float)
-    parser.add_argument('--version', type=str)
+    parser.add_argument('--version', type=str, default=None)
+    parser.add_argument('--list', action='store_true') # pode ou nao existir
+
     args = parser.parse_args()
 
-    model_path = f"artifacts/{args.version}.pkl"
-    model = load_model(model_path)
-    if args.efficiency is not None:
-        predict_eff(model, args.efficiency)
-    elif args.data is not None:
-        predict_data(model, args.data)
+    if args.list:
+        show_models()
+    else:
+        model_path = resolve_version(args.version)
+        model = load_model(model_path)
+        if args.efficiency is not None:
+            predict_eff(model, args.efficiency)
+        elif args.data is not None:
+            predict_data(model, args.data)
