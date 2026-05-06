@@ -32,3 +32,7 @@ jobs:
       # o passo seguinte ser ao build do codigo
       - name: build da imagem de treino
         run: docker build -f Dockerfile.train -t docker-ml-projeto-train .
+
+      # armazenar o artefato do build da imagem de treino no runner
+      - name: validacao
+        run: docker run -v ${{ github.workspace }}/artifacts:/app/artifacts docker-ml-projeto-train
