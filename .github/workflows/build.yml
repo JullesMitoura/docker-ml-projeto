@@ -92,3 +92,7 @@ jobs:
       # verificar se de fato o artefato foi criado
       - name: validacao de inferencia
         run: docker run -v ${{ github.workspace }}/artifacts:/app/artifacts docker-ml-projeto-inference python src/inference.py --efficiency 300
+
+  publish:
+    runs-on: ubuntu-latest
+    needs: validacao
