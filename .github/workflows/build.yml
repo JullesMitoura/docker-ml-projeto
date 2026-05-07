@@ -114,6 +114,7 @@ jobs:
         with:
           context: .
           file: Dockerfile.train
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/docker-ml-projeto-train:latest
+          platform: linux/arm64,linux/amd64
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/docker-ml-projeto:latest
           push: true
           cache-from: type=gha,scope=train
