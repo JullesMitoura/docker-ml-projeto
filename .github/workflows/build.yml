@@ -9,7 +9,7 @@ name: Build Docker Image
 on:
   push:
     branches:
-      - modulo06
+      - modulo07
 
 # passo 03:
 # definir os jobs do workflow
