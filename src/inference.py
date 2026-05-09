@@ -1,10 +1,12 @@
 import os
 import pickle
 import argparse
-from utils.logger import get_logger
+from functools import lru_cache
+from src.utils.logger import get_logger
+from src.utils.versioning import resolve_version, list_versions
 import numpy as np
 from dotenv import load_dotenv
-from utils.versioning import resolve_version, list_versions
+
 
 load_dotenv(override=True)
 MODEL_PATH = os.getenv("MODEL_PATH")
@@ -21,11 +23,17 @@ def load_model(model_path):
     model = model['model']
     return model
 
+
+@lru_cache(maxsize=1)
+def get_model():
+    return load_model(resolve_version(None))
+
 def predict_eff(model, x):
     x_array = np.array(x).reshape(1, -1)  # Reshape para garantir que seja um array 2D
     logger.info("Realizando predição de eficiencia...")
     res = model.predict(x_array)
     logger.info(f"Dia {x} | eficiência: {res[0]}.")
+    return float(res[0])
 
 def predict_data(model, y):
     coef = model.coef_
@@ -35,6 +43,7 @@ def predict_data(model, y):
     dia = (y - intercept) / coef[0]
 
     logger.info(f"Predição: eficiência {y} | dia {dia}.")
+    return dia
 
 def show_models():
     list_models = list_versions()
